@@ -26,6 +26,24 @@ void saveTransaction(const Transaction& t) {
         }
 }
 
+ void showHistory() {
+    std::ifstream file("finances.csv");
+    std::string line;
+
+    if (!file.is_open()) {
+        std::cout << "История пока пуста." << std::endl;
+        return;
+    }
+    std::cout << "\n--- История транзакций ---" << std::endl;
+    std::cout << "Дата | Сумма | Категория | Предмет" << std::endl;
+    std::cout << "-----------------------------------" << std::endl;
+
+    while (std::getline(file, line)) {
+        //Здесь можно просто выводить строку или парсить её по разделителю ';'
+        std::cout << line << std::endl;
+    }
+    file.close();
+ }
 int main() {
     Transaction current;
 
@@ -46,8 +64,20 @@ int main() {
 
     saveTransaction(current);
 
-    return 0;
-}
-//git add .
-//git commit -m "1 day"
-//git push origin main
+    int choice;
+    while (true) {
+        std::cout << "\n1. Добавить транзакцию\n2. Показать историю\n3. Выход\nВыбор: ";
+        std::cin >> choice;
+
+        if (choice == 1) {
+            Transaction current;
+            //...код вывода данных...
+            saveTransaction(current);
+        }else if (choice == 2) {
+            showHistory();
+        } else if (choice == 3) {
+            break;
+        }
+        }
+    
+    return 0; }
