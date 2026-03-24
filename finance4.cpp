@@ -75,8 +75,39 @@ std::string getCurrentDate() {
     << std::setfill('0') << std::setw(2) << now->tm_mday;
     return oss.str();
 }
+void showBalance() {
+    std::ifstream file("finance.csv");
+    std::string line;
+    double total = 0;
+    double income = 0;
+    double expense = 0;
 
+    if (!file.is_open()) return;
 
+    while (std::getline(file, line)) { 
+        std::stringstream ss(line);
+        std::string segment;
+        int column = 0;
+
+        while (std::getline(ss, segment, ',')) {
+            column++;
+            if (column == 2) { // Столбец с суммой
+                try {
+                    double val = std::stod(segment);
+                    total += val;
+                    if (val > 0) income += val;
+                    else expense += val;
+                } catch (...) {}
+            }
+        }
+    }
+    std::cout << "\n=== ВАШ БАЛАНС ===" << std::endl;
+    std::cout << "Всего заработано: " << income << " тенге" << std::endl;
+    std::cout << "Всего потрачено: " << expense << " тенге" << std::endl;
+    std::cout << "ОСТАТОК: " << total << " тенге" << std::endl;
+    std::cout << "==================\n" << std::endl;
+    file.close();
+}
 int main() {
 
     Transaction current;
